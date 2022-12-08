@@ -1,0 +1,106 @@
+server:
+  port: 22011
+#  ssl:
+#    enabled: true
+#    key-store: /etc/ssl/certs/java/a922.p12
+#    key-store-password: openapi
+#    key-alias: a922-store
+  tomcat:
+    max-threads: 2000 
+    accesslog:
+      enabled: true 
+      pattern: "%{X-Forwarded-For}i [%{yyyy-MM-dd HH:mm:ss Z}t] %H %m %U %s %q %b %D %{UUID-Client}i %{UUID-my-boot-app}o"   
+    basedir: /logs/openapi/gateway
+
+spring:
+  application:
+    name: ban-gateway
+  redis:
+    host: 127.0.0.1
+    port: 6379   
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: -1ms
+        min-idle: 2
+      shutdown-timeout: 200ms
+    ssl:  false
+    timeout: 2000
+         
+eureka:
+  instance:
+#    securePort: ${server.port}
+#    securePortEnabled: true
+#    nonSecurePortEnabled: false
+    lease-expiration-duration-in-seconds: 7 # 디스커버리는 서비스 등록 해제 하기 전에 마지막 하트비트에서부터 7초 기다림
+    lease-renewal-interval-in-seconds: 5 # 디스커버리한테 5초마다 하트비트 전송
+  client:
+    registerWithEureka: true
+    fetchRegistry: true # 캐쉬 사용
+    serviceUrl:
+      defaultZone: http://localhost:23001/eureka/
+      enabled: true    
+zuul:
+#  sslHostnameValidationEnabled: false
+  retryable: true  
+  prefix: /api
+  ribbonIsolationStrategy: THREAD
+  threadPool:
+    useSeparateThreadPools: true
+  add-proxy-headers: false    
+  routes:
+    oauth:
+      path: /oauth/**
+      sensitiveHeaders:
+      serviceId: oauth
+    service:
+      path: /service/**
+      sensitiveHeaders:
+    test:
+      path: /redirect/**
+      url: http://google.com  
+    static:
+      path: /static/**      
+           
+hystrix:
+  command:              
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 6000000
+  threadpool:
+    default:
+      coreSize: 3000
+      maximumSize: 3000
+      allowMaximumSizeToDivergeFromCoreSize: true
+  
+ribbon: 
+#  IsSecure: true
+  eureka:
+    enabled: true
+  NIWSServerListClassName: com.netflix.niws.loadbalancer.DiscoveryEnabledNIWSServerList
+  ConnectTimeout: 30000
+  ReadTimeout: 60000
+  MaxTotalHttpConnections: 2000
+  MaxConnectionsPerHost: 2000           
+  okhttp:
+    enabled: true  
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-details: ALWAYS
+hanati:
+  company: test
+  log:
+    attach-body: true
+  authAesKey: fb1755281b0ca6184a0ee644e6477ee7
+  tokenExpiresIn: 15

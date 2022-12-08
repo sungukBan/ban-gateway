@@ -1,0 +1,125 @@
+package com.gateway.http;
+
+import com.gateway.messages.MessageContexts;
+import org.springframework.lang.Nullable;
+
+/**
+ * HTTP Response Code 정의
+ * @author hclee
+ *
+ */
+public enum OpenAPIHttpStatus {
+
+	NO_ERROR(1200, "HttpStatus.NO_ERROR"),
+
+	BAD_REQUEST(1400, "HttpStatus.BAD_REQUEST"),
+
+	AUTHORIZED_REQUIRED(1401, "HttpStatus.AUTHORIZED_REQUIRED"),
+
+	UNAUTHORIZED(1402, "HttpStatus.UNAUTHORIZED"),
+
+	SERVICE_DISABLED(1403, "HttpStatus.SERVICE_DISABLED"),
+
+	SERVICE_NOT_FOUND(1404, "HttpStatus.SERVICE_NOT_FOUND"),
+
+	INTERNAL_SERVER_ERROR(1500, "HttpStatus.INTERNAL_SERVER_ERROR"),
+
+	ACCESS_DENIED_BY_PROTECTED_SERVICE(1501, "HttpStatus.ACCESS_DENIED_BY_PROTECTED_SERVICE"),
+
+	BAD_RESPONSE_FORM_PROTECTED_SERVICE(1502, "HttpStatus.BAD_RESPONSE_FORM_PROTECTED_SERVICE"),
+
+	SERVICE_TEPORARILY_UNAVAILABLE(1503, "HttpStatus.SERVICE_TEPORARILY_UNAVAILABLE"),
+
+	ASSERTION_FALSIFIED(1600, "HttpStatus.ASSERTION_FALSIFIED"),
+
+	ERROR_IN_ASSERTION_PROCESSING(1601, "HttpStatus.ERROR_IN_ASSERTION_PROCESSING"),
+
+	NOT_YET_IMPLEMENTED(11000, "HttpStatus.NOT_YET_IMPLEMENTED"),
+
+	NOT_APPLICATION_IN_THIS_CONTEXT(11001, "HttpStatus.NOT_APPLICATION_IN_THIS_CONTEXT"),
+
+	INVALID_XPATH_PATTERN(11002, "HttpStatus.INVALID_XPATH_PATTERN"),
+
+	UNRESOLVABLE_NAMESPACE_PREFIX(11003, "HttpStatus.UNRESOLVABLE_NAMESPACE_PREFIX"),
+
+
+
+
+	REQUEST_BODY_IS_NULL(1300, MessageContexts.REQUEST_BODY_IS_NULL),
+
+	COMPANY_CODE_IS_NULL(1301, MessageContexts.COMPANY_CODE_IS_NULL),
+
+	TOKEN_DOES_NOT_EXIST(1302, MessageContexts.TOKEN_DOES_NOT_EXIST),
+
+	ACCESS_NOT_ALLOWED_CLIENT_ID(1700, MessageContexts.ACCESS_NOT_ALLOWED_CLIENT_ID),
+
+	ACCESS_NOT_ALLOWED_SERVICE_URI(1701, MessageContexts.ACCESS_NOT_ALLOWED_SERVICE_URI),
+
+	ACCESS_NOT_ALLOWED_CLIENT_ID_IP(1702, MessageContexts.ACCESS_NOT_ALLOWED_CLIENT_ID_IP),
+
+	ACCESS_NOT_ALLOWED_CLIENT_ID_SERVICE_URI(1703, MessageContexts.ACCESS_NOT_ALLOWED_CLIENT_ID_SERVICE_URI),
+
+	ACCESS_NOT_ALLOWED_COMPANY_CODE(1704, MessageContexts.ACCESS_NOT_ALLOWED_COMPANY_CODE),
+
+	INVALID_TOKEN(1800, MessageContexts.INVALID_TOKEN),
+
+	EXCEEDED_CONNECTIONS(1900, MessageContexts.EXCEEDED_CONNECTIONS),
+
+	EXCEEDED_GETTOKEN(1901, MessageContexts.EXCEEDED_GETTOKEN),
+
+	EXCEEDED_CHECKTOKEN(1902, MessageContexts.EXCEEDED_CHECKTOKEN),
+
+
+
+	TRANSACTION_RESTRICTION_WEEK(2001, MessageContexts.TRANSACTION_RESTRICTION_WEEK),
+
+	TRANSACTION_RESTRICTION_TIME(2002, MessageContexts.TRANSACTION_RESTRICTION_TIME),
+
+	TRANSACTION_RESTRICTION_WEEK_TIME(2003, MessageContexts.TRANSACTION_RESTRICTION_WEEK_TIME),
+
+	TRANSACTION_RESTRICTION_DATE(2004, MessageContexts.TRANSACTION_RESTRICTION_DATE),
+
+	TRANSACTION_RESTRICTION_DATE_TIME(2005, MessageContexts.TRANSACTION_RESTRICTION_DATE_TIME),
+
+	TRANSACTION_RESTRICTION_HOLIDAY(2006, MessageContexts.TRANSACTION_RESTRICTION_HOLIDAY);
+
+
+
+
+	private final int value;
+
+	private final String reasonPhraseCode;
+
+
+	OpenAPIHttpStatus(int value, String reasonPhraseCode) {
+		this.value = value;
+		this.reasonPhraseCode = reasonPhraseCode;
+	}
+
+
+	/**
+	 * Return the integer value of this status code.
+	 */
+	public int value() {
+		return this.value;
+	}
+
+	/**
+	 * Return the reason phrase of this status code.
+	 */
+	public String getReasonPhraseCode() {
+		return this.reasonPhraseCode;
+	}
+
+
+	@Nullable
+	public static OpenAPIHttpStatus resolve(int statusCode) {
+		for (OpenAPIHttpStatus status : values()) {
+			if (status.value == statusCode) {
+				return status;
+			}
+		}
+		return null;
+	}
+
+}

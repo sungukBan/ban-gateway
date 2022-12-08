@@ -1,0 +1,77 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven{ url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
+        mavenCentral()
+        jcenter()
+        maven { url 'http://repo.spring.io/plugins-release' }
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    ext {
+        springBootVersion = '2.1.3.RELEASE'
+        springCloudVersion = 'Greenwich.RELEASE'
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: "io.spring.dependency-management"
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    options.encoding = 'UTF-8'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+jar {
+    baseName = 'integration-gw'
+    version = '1.0.0-SNAPSHOT'
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+    compile('org.springframework.cloud:spring-cloud-starter-netflix-zuul')
+    compile('org.springframework.cloud:spring-cloud-starter-netflix-hystrix')
+    compile('org.springframework.cloud:spring-cloud-starter-netflix-ribbon')
+    compile('org.springframework.cloud:spring-cloud-starter-openfeign')
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.cloud:spring-cloud-starter-sleuth')
+    compile('org.springframework.cloud:spring-cloud-starter-zipkin')
+    compile('org.springframework.boot:spring-boot-starter-security')
+    compile('org.springframework.retry:spring-retry:1.2.2.RELEASE')
+    compile('org.json:json:20180813')
+    compile('org.springframework.boot:spring-boot-starter-data-redis:2.0.7.RELEASE')
+    compile('io.lettuce:lettuce-core:5.1.4.RELEASE')
+    compile('org.apache.commons:commons-pool2')
+    compile('org.codehaus.groovy:groovy-all:2.5.4')
+    compile('io.springfox:springfox-swagger2:2.7.0')
+    compile('io.springfox:springfox-swagger-ui:2.7.0')
+    compile('com.github.danielwegener:logback-kafka-appender:0.2.0-RC2')
+    compile('org.codehaus.janino:janino:3.0.10')
+    compile('commons-io:commons-io:2.4')
+    compile('com.google.code.gson:gson:2.8.5')
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+test {
+    useJUnitPlatform()
+}
